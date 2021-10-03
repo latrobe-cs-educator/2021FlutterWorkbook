@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2019, the Dart project authors.  Please see the AUTHORS file
+for details. All rights reserved. Use of this source code is governed by a
+BSD-style license that can be found in the LICENSE file. -->
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" sizes="32x32" href="https://dartpad.dev/dart-32.png">
+    <link rel="shortcut icon" type="image/png" sizes="64x64" href="https://dartpad.dev/dart-64.png">
+    <link rel="shortcut icon" type="image/png" sizes="192x192" href="https://dartpad.dev/dart-192.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>DartPad</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
+    <link href="embed-inline_data_009/css2.css" rel="stylesheet">
+
+    <!-- codemirror -->
+    <link href="embed-inline_data_009/codemirror.css" rel="stylesheet" media="screen">
+    <link href="embed-inline_data_009/lint.css" rel="stylesheet" media="screen">
+    <link href="embed-inline_data_009/show-hint.css" rel="stylesheet" media="screen">
+    <link href="embed-inline_data_009/cm-scrollbars.css" rel="stylesheet" media="screen">
+    <link href="embed-inline_data_009/cm-dartpad-dark.css" rel="stylesheet" media="screen">
+    <link href="embed-inline_data_009/cm-dartpad-light.css" rel="stylesheet" media="screen">
+
+    <script async="" src="embed-inline_data_009/analytics.js"></script><script src="embed-inline_data_009/codemirror.js" defer="defer"></script>
+    <script src="embed-inline_data_009/simplescrollbars.js" defer="defer"></script>
+    <script src="embed-inline_data_009/split.js" defer="defer"></script>
+
+    <!-- check that local storage is enabled -->
+    <script src="embed-inline_data_009/check_localstorage.js"></script>
+
+    <script defer="defer" src="embed-inline_data_009/embed_inline.js"></script>
+    <script defer="defer" src="embed-inline_data_009/ga.js"></script>
+    <script type="text/javascript" src="embed-inline_data_009/dark_mode.js"></script><link rel="stylesheet" type="text/css" href="embed-inline_data_009/styles_light.css">
+
+    <!-- begin Material Design -->
+    <script src="embed-inline_data_009/material-components-web.js"></script>
+    <link href="embed-inline_data_009/icon.css" rel="stylesheet">
+    <!-- end Material Design -->
+</head>
+
+<body class="d-flex flex-column">
+<div id="progress-bar" role="progressbar" class="mdc-linear-progress mdc-linear-progress--indeterminate hide">
+    <div class="mdc-linear-progress__buffering-dots"></div>
+    <div class="mdc-linear-progress__buffer" style="transform: scaleX(1);"></div>
+    <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar" style="transform: scaleX(1);">
+        <span class="mdc-linear-progress__bar-inner"></span>
+    </div>
+    <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+        <span class="mdc-linear-progress__bar-inner"></span>
+    </div>
+</div>
+<div id="navbar">
+    <nav>
+        <div class="mdc-tab-bar" role="tablist">
+            <div class="mdc-tab-scroller">
+                <div class="mdc-tab-scroller__scroll-area mdc-tab-scroller__scroll-area--scroll" style="margin-bottom: -17px;">
+                    <div class="mdc-tab-scroller__scroll-content">
+                        <button id="editor-tab" class="mdc-tab mdc-tab--active" role="tab" aria-selected="true" selected="" tabindex="0">
+                             <span class="mdc-tab__content">
+                                 <span class="mdc-tab__text-label">Dart</span>
+                             </span>
+                            <span class="mdc-tab-indicator mdc-tab-indicator--active">
+                                 <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                             </span>
+                            <span class="mdc-tab__ripple mdc-ripple-upgraded"></span>
+                        </button>
+                        <button id="solution-tab" class="mdc-tab mdc-tab" role="tab" tabindex="0" hidden="">
+                             <span class="mdc-tab__content">
+                                 <span class="mdc-tab__text-label">Solution</span>
+                             </span>
+                            <span class="mdc-tab-indicator mdc-tab-indicator">
+                                 <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                             </span>
+                            <span class="mdc-tab__ripple mdc-ripple-upgraded"></span>
+                        </button>
+                        <button id="test-tab" class="mdc-tab mdc-tab" role="tab" tabindex="0" hidden="">
+                             <span class="mdc-tab__content">
+                                 <span class="mdc-tab__text-label">Tests</span>
+                            </span>
+                            <span class="mdc-tab-indicator mdc-tab-indicator">
+                                 <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                             </span>
+                            <span class="mdc-tab__ripple mdc-ripple-upgraded"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="nav-buttons">
+        <button id="install-button" class="mdc-button mdc-ripple-upgraded">Install SDK</button>
+        <button id="show-hint" class="mdc-button mdc-ripple-upgraded" hidden="">Hint</button>
+        <button id="format-code" class="mdc-button mdc-ripple-upgraded">Format</button>
+        <button id="reload-gist" class="mdc-button mdc-ripple-upgraded">Reset</button>
+        <button id="execute" class="mdc-button mdc-button--raised mdc-ripple-upgraded">
+            <i class="material-icons mdc-button__icon">play_arrow</i>
+            Run
+        </button>
+        <div class="position-relative text-right pr-2">
+            <button id="menu-button" class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" style="--mdc-ripple-fg-size: 28px; --mdc-ripple-fg-scale: 1.7142857142857142; --mdc-ripple-left: 10px; --mdc-ripple-top: 10px;">more_vert</button>
+            <div id="main-menu" class="mdc-menu mdc-menu-surface">
+                <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                    <li id="show-test-menu-item" class="mdc-list-item" role="menuitem" tabindex="-1">
+                        <span id="show-test-checkmark" class="mdc-list-item__graphic hide">
+                            <i class="material-icons mdc-select__icon" tabindex="-1" role="button">check</i>
+                        </span>
+                        <span class="mdc-list-item__text">Show tests</span>
+                    </li>
+                    <li id="editable-test-solution-menu-item" class="mdc-list-item" role="menuitem" tabindex="-1">
+                      <span id="editable-test-solution-checkmark" class="mdc-list-item__graphic hide">
+                          <i class="material-icons mdc-select__icon" tabindex="-1" role="button">check</i>
+                      </span>
+                        <span class="mdc-list-item__text">Editable test/solution</span>
+                    </li>
+                    <li id="toggle-null-safety-menu-item" class="mdc-list-item" role="menuitem" tabindex="-1">
+                        <span id="toggle-null-safety-checkmark" class="mdc-list-item__graphic">
+                            <i class="material-icons mdc-select__icon" tabindex="-1" role="button">check</i>
+                        </span>
+                        <span class="mdc-list-item__text">Null Safety</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<section id="tab-container" class="flex-column">
+    <div id="editor-container" style="flex-basis: calc(70% - 3px);">
+        <div id="user-code-view" class="flex-auto d-flex flex-row no-overflow">
+            <div id="user-code-editor" spellcheck="false"><div class="CodeMirror CodeMirror-simplescroll cm-s-dartpad"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 33px;"><textarea style="position: absolute; bottom: -1em; padding: 0px; width: 1px; height: 1em; outline: currentcolor none medium;" autocorrect="off" autocapitalize="none" spellcheck="false" tabindex="0" wrap="off"></textarea></div><div class="CodeMirror-simplescroll-horizontal" cm-not-content="true" style="display: none;"><div></div></div><div class="CodeMirror-simplescroll-vertical" cm-not-content="true" style="display: none;"><div></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1" draggable="true"><div class="CodeMirror-sizer" style="margin-left: 29px; margin-bottom: -17px; border-right-width: 33px; min-height: 523px; min-width: 536.2px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div style="position: relative; outline: currentcolor none medium;" role="presentation"><div class="CodeMirror-measure"><pre class="CodeMirror-line-like"><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"><div class="CodeMirror-cursor" style="left: 4px; top: 0px; height: 15.64px;">&nbsp;</div></div><div class="CodeMirror-code" role="presentation" style=""><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">1</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span class="cm-comment">//https://api.dart.dev/stable/2.14.1/dart-core/List-class.html</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">2</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span class="cm-builtin">void</span> <span class="cm-variable">main</span>() {</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">3</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-comment">/* below Dart infurs the list is of type int, an error </span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">4</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-comment">will be thrown if you try to add other data types */</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">5</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-builtin">var</span> <span class="cm-variable">list</span> <span class="cm-operator">=</span> [<span class="cm-number">1</span>, <span class="cm-number">2</span>, <span class="cm-number">3</span>];</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">6</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-variable">print</span>(<span class="cm-variable">list</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">7</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  </span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">8</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-comment">//we can also state the data type</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">9</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-builtin">var</span> <span class="cm-variable">list2</span> <span class="cm-operator">=</span> <span class="cm-operator">&lt;</span><span class="cm-builtin">int</span><span class="cm-operator">&gt;</span>[];  </span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">10</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-variable">list2</span>.<span class="cm-variable">add</span>(<span class="cm-number">12</span>); </span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">11</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-variable">list2</span>.<span class="cm-variable">add</span>(<span class="cm-number">13</span>); </span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">12</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-variable">print</span>(<span class="cm-variable">list2</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">13</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-variable">print</span>(<span class="cm-variable">list2</span>.<span class="cm-variable">runtimeType</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">14</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  </span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">15</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-comment">//we can use list methods</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">16</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-variable">print</span>(<span class="cm-variable">list2</span>.<span class="cm-variable">contains</span>(<span class="cm-number">12</span>).<span class="cm-variable">toString</span>());</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">17</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  </span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">18</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-comment">//and use conditionals in list, here Television will only be </span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">19</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-comment">//included in the list if the 'condition' is true</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">20</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-builtin">var</span> <span class="cm-variable">condition</span> <span class="cm-operator">=</span> <span class="cm-atom">false</span>;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">21</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-builtin">var</span> <span class="cm-variable">nav</span> <span class="cm-operator">=</span> [</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">22</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-string">'Home'</span>,</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">23</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-string">'Furniture'</span>,</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">24</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-string">'Plants'</span>,</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">25</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-keyword">if</span> (<span class="cm-variable">condition</span>) <span class="cm-string">'Television'</span>];</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">26</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">  <span class="cm-variable">print</span>(<span class="cm-variable">nav</span>);</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">27</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation">}</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">28</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 33px; width: 1px; border-bottom: 0px solid transparent; top: 523px;"></div><div class="CodeMirror-gutters" style="height: 556px; left: 0px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 29px;"></div></div></div></div></div>
+        </div>
+        <div id="solution-view" class="flex-auto d-flex flex-row no-overflow" spellcheck="false" hidden="">
+            <div id="solution-editor" class="flex-auto d-flex flex-column" spellcheck="false"><div class="CodeMirror CodeMirror-simplescroll cm-s-dartpad"><div style="overflow: hidden; position: relative; width: 3px; height: 0px;"><textarea style="position: absolute; bottom: -1em; padding: 0px; width: 1px; height: 1em; outline: currentcolor none medium;" autocorrect="off" autocapitalize="none" spellcheck="false" tabindex="0" readonly="readonly" wrap="off"></textarea></div><div class="CodeMirror-simplescroll-horizontal" cm-not-content="true"><div></div></div><div class="CodeMirror-simplescroll-vertical" cm-not-content="true"><div></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1" draggable="true"><div class="CodeMirror-sizer" style="margin-left: 0px; min-width: 3px;"><div style="position: relative;"><div class="CodeMirror-lines" role="presentation"><div style="position: relative; outline: currentcolor none medium;" role="presentation"><div class="CodeMirror-measure"></div><div class="CodeMirror-measure"><pre class="CodeMirror-line" role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"></div><div class="CodeMirror-code" role="presentation"></div></div></div></div></div><div style="position: absolute; height: 50px; width: 1px;"></div><div class="CodeMirror-gutters" style="left: 0px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 1px;"></div></div></div></div></div>
+        </div>
+        <div id="test-view" class="flex-auto d-flex flex-row no-overflow" spellcheck="false" hidden="">
+            <div id="test-editor" class="flex-auto d-flex flex-column" spellcheck="false"><div class="CodeMirror CodeMirror-simplescroll cm-s-dartpad"><div style="overflow: hidden; position: relative; width: 3px; height: 0px;"><textarea style="position: absolute; bottom: -1em; padding: 0px; width: 1px; height: 1em; outline: currentcolor none medium;" autocorrect="off" autocapitalize="none" spellcheck="false" tabindex="0" readonly="readonly" wrap="off"></textarea></div><div class="CodeMirror-simplescroll-horizontal" cm-not-content="true"><div></div></div><div class="CodeMirror-simplescroll-vertical" cm-not-content="true"><div></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1" draggable="true"><div class="CodeMirror-sizer" style="margin-left: 0px; min-width: 3px;"><div style="position: relative;"><div class="CodeMirror-lines" role="presentation"><div style="position: relative; outline: currentcolor none medium;" role="presentation"><div class="CodeMirror-measure"></div><div class="CodeMirror-measure"><pre class="CodeMirror-line" role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors"></div><div class="CodeMirror-code" role="presentation"></div></div></div></div></div><div style="position: absolute; height: 50px; width: 1px;"></div><div class="CodeMirror-gutters" style="left: 0px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 1px;"></div></div></div></div></div>
+        </div>
+    </div>
+    <div class="editor-button-group">
+        <div id="dartbusy" class="busylight"></div>
+        <button id="copy-code" title="Copy code" class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" style="--mdc-ripple-fg-size: 28px; --mdc-ripple-fg-scale: 1.7142857142857142; --mdc-ripple-left: 10px; --mdc-ripple-top: 10px;">file_copy</button>
+        <button id="open-in-dartpad" title="Full screen" class="mdc-icon-button material-icons mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" style="--mdc-ripple-fg-size: 28px; --mdc-ripple-fg-scale: 1.7142857142857142; --mdc-ripple-left: 10px; --mdc-ripple-top: 10px;">launch</button>
+    </div>
+    <div class="gutter gutter-vertical" style="flex-basis: 6px;"></div><div id="console-view" style="flex-basis: calc(30% - 3px);">
+        <div id="console-output-header">
+            <span class="view-label">Console <span id="unread-console-counter" class="Counter" hidden=""></span></span>
+        </div>
+        <div id="console-output-container" class="console custom-scrollbar"></div>
+    </div>
+    <div id="web-output" hidden="">
+        <iframe id="frame" sandbox="allow-scripts" class="flex-auto" src="embed-inline_data/frame.htm">
+        </iframe>
+    </div>
+    <div class="mdc-snackbar">
+        <div class="mdc-snackbar__surface">
+            <div class="mdc-snackbar__label" role="status" aria-live="polite">
+            </div>
+        </div>
+    </div>
+</section>
+<footer flex="" layout="" horizontal="" class="footer">
+    <div id="feature-message" class="info-message">Null safety</div>
+    <div id="issues-message" class="info-message">no issues</div>
+    <button id="issues-toggle" class="mdc-button mdc-button--dense mdc-button--outlined mdc-ripple-upgraded" hidden="">hide</button>
+</footer>
+
+<div id="flash-container" class="position-fixed right-2 bottom-6">
+    <div id="test-result-box" class="flash flash-warn" hidden="">
+        <div title="Close" class="close-flash-container">
+            <button class="close-flash-button mdc-icon-button material-icons">close</button>
+        </div>
+        <div class="message-container custom-scrollbar"></div>
+    </div>
+    <div id="hint-box" class="flash" hidden="">
+        <div title="Close" class="close-flash-container">
+            <button class="close-flash-button mdc-icon-button material-icons">close</button>
+        </div>
+        <div class="message-container custom-scrollbar"></div>
+    </div>
+    <div id="issues" hidden=""></div>
+</div>
+
+<div class="mdc-dialog" role="alertdialog" aria-modal="true" aria-labelledby="my-dialog-title" aria-describedby="my-dialog-content">
+    <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface">
+            <h2 class="mdc-dialog__title" id="my-dialog-title"></h2>
+            <div class="mdc-dialog__content" id="my-dialog-content"></div>
+            <footer class="mdc-dialog__actions">
+                <button type="button" id="dialog-left-button" class="mdc-button mdc-dialog__button mdc-ripple-upgraded">
+                    <span class="mdc-button__label">No</span>
+                </button>
+                <button type="button" id="dialog-right-button" class="mdc-button mdc-dialog__button mdc-ripple-upgraded">
+                    <span class="mdc-button__label">Yes</span>
+                </button>
+            </footer>
+        </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+</div>
+
+
+
+</body></html>
